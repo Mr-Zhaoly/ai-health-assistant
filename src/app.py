@@ -27,7 +27,7 @@ class HealthAssistantApp:
 
         # 如果知识库为空，处理PDF并创建知识库
         if not self.vector_store.texts:
-            st.info("正在初始化知识库，这可能需要一些时间...")
+            print("正在初始化知识库，这可能需要一些时间...")
             self.process_pdf_and_build_kb()
 
         self.query_engine = QueryEngine(self.dashscope_client, self.vector_store)
