@@ -5,6 +5,7 @@ from typing import List, Tuple
 from pdf2image import convert_from_path
 import pytesseract
 from PIL import Image
+import os
 
 
 class PDFProcessor:
@@ -46,6 +47,18 @@ class PDFProcessor:
         except Exception as e:
             print(f"处理图片失败 {image_path}: {e}")
             return {"ocr": ""}
+
+    def images_to_text(self, img_dir):
+        pages_text = []
+        for img_filename in os.listdir(img_dir):
+            if img_filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')):
+                img_path = os.path.join(img_dir, img_filename)
+                print(f"    - 处理图片: {img_filename}")
+
+                img_text_info = self.image_to_text(img_path)
+                pages_text.append(img_text_info["ocr"])
+
+        return pages_text
 
     def pdf_to_text(self, pdf_path: str, dpi: int = 300):
         # 1. 将PDF转换为图像列表

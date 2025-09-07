@@ -13,6 +13,7 @@ class Config:
     IMAGES_PATH = "D:/code/ai-health-assistant/data/images/"
     PROCESSED_DIR = "D://code//ai-health-assistant//data//processed//"
     KNOWLEDGE_BASE_DIR = "D://code//ai-health-assistant//knowledge_base//"
+    NUTRITION_DICT_PATH = "D:/code/ai-health-assistant/data/nutrition_dict.txt"
 
     # 文本处理参数
     CHUNK_SIZE = 500

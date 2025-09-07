@@ -34,20 +34,14 @@ class HealthAssistantApp:
 
     def process_pdf_and_build_kb(self):
         """处理PDF并构建知识库"""
-        # 读取PDF文件
-        pdf_reader = PdfReader(self.config.PDF_PATH)
-        # pages_text, char_page_mapping = self.pdf_processor.extract_text_with_page_numbers(pdf_reader)
+        # # 读取PDF文件
+        # pdf_reader = PdfReader(self.config.PDF_PATH)
+        # # pages_text, char_page_mapping = self.pdf_processor.extract_text_with_page_numbers(pdf_reader)
         # 处理images目录中的独立图片文件
         print("  - 正在处理独立图片文件...")
         pages_text = []
         img_dir = self.config.IMAGES_PATH
-        for img_filename in os.listdir(img_dir):
-            if img_filename.lower().endswith(('.png', '.jpg', '.jpeg', '.gif', '.bmp')):
-                img_path = os.path.join(img_dir, img_filename)
-                print(f"    - 处理图片: {img_filename}")
-
-                img_text_info = self.pdf_processor.image_to_text(img_path)
-                pages_text.append(img_text_info["ocr"])
+        pages_text = self.pdf_processor.images_to_text(img_dir)
 
         # 清理和分块文本
         all_chunks = []

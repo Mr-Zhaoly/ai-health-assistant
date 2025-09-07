@@ -2,10 +2,12 @@ import re
 import jieba
 import os
 from typing import List
+from src.config import Config
 
 
 class TextProcessor:
-    def __init__(self, dict_path="data/nutrition_dict.txt"):
+    def __init__(self):
+        dict_path = Config.NUTRITION_DICT_PATH
         # 检查词典文件是否存在
         if os.path.exists(dict_path):
             jieba.load_userdict(dict_path)
