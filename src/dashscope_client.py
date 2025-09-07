@@ -19,7 +19,7 @@ class DashScopeClient:
                 input=text,
                 dimensions=1024
             )
-            print(f"    - resp: {resp}")
+            # print(f"    - resp: {resp}")
             if resp.status_code == 200:
                 responses.append(np.array(resp.output['embeddings'][0]['embedding']))
             else:

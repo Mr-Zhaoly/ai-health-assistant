@@ -73,7 +73,7 @@ class HealthAssistantApp:
 
         if question:
             print("正在思考...")
-            response, sources = self.query_engine.query(question)
+            response, sources = self.query_engine.query(question, top_k=3, rerank_top_n=10)
 
             print("回答:")
             print(response)

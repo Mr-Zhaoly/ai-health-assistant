@@ -15,6 +15,9 @@ class Config:
     KNOWLEDGE_BASE_DIR = "D://code//ai-health-assistant//knowledge_base//"
     NUTRITION_DICT_PATH = "D:/code/ai-health-assistant/data/nutrition_dict.txt"
 
+    # 大模型路径
+    BGE_RERANKER_PATH = "D:/LLM/bge-reranker/BAAI/bge-reranker-large"
+
     # 文本处理参数
     CHUNK_SIZE = 500
     CHUNK_OVERLAP = 50
