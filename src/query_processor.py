@@ -1,8 +1,12 @@
+from langchain_community.llms.tongyi import Tongyi
+
 from .config import Config
 from .dashscope_client import DashScopeClient
 from .vector_store import VectorStore
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
 import torch
+import logging
+from langchain.retrievers import MultiQueryRetriever
 
 
 
