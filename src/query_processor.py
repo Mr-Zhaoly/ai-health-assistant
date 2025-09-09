@@ -1,9 +1,9 @@
-from langchain_community.llms.tongyi import Tongyi
-
 from .config import Config
 from .dashscope_client import DashScopeClient
 from .vector_store import VectorStore
 from transformers import AutoModelForSequenceClassification, AutoTokenizer
+from langchain.chains.question_answering import load_qa_chain
+from langchain_community.callbacks.manager import get_openai_callback
 import torch
 import logging
 from langchain.retrievers import MultiQueryRetriever
@@ -67,3 +67,63 @@ class QueryEngine:
 
         # 按分数降序排列
         return sorted(chunks, key=lambda x: x['score'], reverse=True)
+
+    def create_multi_query_retriever(self, k = 4):
+        """
+        创建MultiQueryRetriever
+
+        参数:
+            vectorstore: 向量数据库
+            llm: 大语言模型，用于查询改写
+
+        返回:
+            retriever: MultiQueryRetriever对象
+        """
+        # 创建基础检索器
+        base_retriever = self.vector_store.faiss_store.as_retriever(search_kwargs={"k": k})
+
+        # 创建MultiQueryRetriever
+        retriever = MultiQueryRetriever.from_llm(
+            retriever=base_retriever,
+            llm=self.vector_store.llm
+        )
+        return retriever
+
+    def process_query_with_multi_retriever(self, query: str, retriever):
+        """
+        使用MultiQueryRetriever处理查询
+
+        参数:
+            query: 用户查询
+            retriever: MultiQueryRetriever对象
+            llm: 大语言模型
+
+        返回:
+            response: 回答
+            unique_pages: 相关文档的页码集合
+        """
+        # 执行查询，获取相关文档
+        docs = retriever.invoke(query)
+        print(f"找到 {len(docs)} 个相关文档")
+
+        # 加载问答链
+        chain = load_qa_chain(self.vector_store.llm, chain_type="stuff")
+
+        # 准备输入数据
+        input_data = {"input_documents": docs, "question": query}
+
+        # 使用回调函数跟踪API调用成本
+        with get_openai_callback() as cost:
+            # 执行问答链
+            response = chain.invoke(input=input_data)
+            print(f"查询已处理。成本: {cost}")
+
+        # 记录源数据
+        sources = []
+
+        # 获取每个文档块的来源页码
+        for doc in docs:
+            text_content = getattr(doc, "page_content", "")
+            sources.append({"text": text_content, "metadata": doc.metadata, "similarity": 0.0})
+
+        return response["output_text"], sources

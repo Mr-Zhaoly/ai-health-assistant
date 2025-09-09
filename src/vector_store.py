@@ -7,6 +7,7 @@ from pathlib import Path
 from langchain_community.vectorstores import FAISS
 from langchain_community.embeddings import DashScopeEmbeddings
 from langchain_core.documents import Document
+from langchain_community.llms import Tongyi
 from src.config import Config
 
 
@@ -21,6 +22,7 @@ class VectorStore:
             model=self.config.TEXT_EMBEDDING,
             dashscope_api_key=self.config.DASHSCOPE_API_KEY,
         )
+        self.llm = Tongyi(model_name=self.config.DEEPSEEK_MODEL, dashscope_api_key=self.config.DASHSCOPE_API_KEY)
 
         # 确保目录存在
         self.storage_path.mkdir(parents=True, exist_ok=True)

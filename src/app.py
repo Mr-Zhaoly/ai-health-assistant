@@ -69,8 +69,10 @@ class HealthAssistantApp:
 
         if question:
             print("正在思考...")
-            # 正常查询
+            # 正常查询整合重排序
             response, sources = self.query_engine.query(question, top_k=3, rerank_top_n=10)
+            # 使用MultiQueryRetriever多语义查询
+            # response, sources = self.query_engine.process_query_with_multi_retriever(question, self.query_engine.create_multi_query_retriever(4))
 
             print("回答:")
             print(response)

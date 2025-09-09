@@ -32,7 +32,7 @@ retriever = MultiQueryRetriever.from_llm(
 )
 
 # 示例查询
-query = "客户经理的考核标准是什么？"
+query = "中午吃什么？"
 # 执行查询
 results = retriever.invoke(query)
 
