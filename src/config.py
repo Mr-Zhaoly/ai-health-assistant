@@ -7,6 +7,7 @@ class Config:
     # DashScope配置
     DASHSCOPE_API_KEY = os.getenv('DASHSCOPE_API_KEY')
     DEEPSEEK_MODEL = "deepseek-v3"
+    TEXT_EMBEDDING = "text-embedding-v4"
 
     # 文件路径
     PDF_PATH = "D:/code/ai-health-assistant/data/中国居民膳食指南.pdf"

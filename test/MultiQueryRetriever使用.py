@@ -18,8 +18,12 @@ embeddings = DashScopeEmbeddings(
 )
 
 # 加载向量数据库，添加allow_dangerous_deserialization=True参数以允许反序列化
-embeddings_path = "D:/code/ai-health-assistant/knowledge_base/embeddings.npy"
-vectorstore = np.load(embeddings_path, allow_pickle=True)
+embeddings_path = "D:/code/ai-health-assistant/knowledge_base/faiss"
+vectorstore = FAISS.load_local(
+                str(embeddings_path),
+                embeddings,
+                allow_dangerous_deserialization=True
+            )
 
 # 创建MultiQueryRetriever
 retriever = MultiQueryRetriever.from_llm(

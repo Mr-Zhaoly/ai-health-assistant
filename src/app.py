@@ -26,7 +26,7 @@ class HealthAssistantApp:
         self.vector_store.load()
 
         # 如果知识库为空，处理PDF并创建知识库
-        if not self.vector_store.texts:
+        if not self.vector_store.faiss_store:
             print("正在初始化知识库，这可能需要一些时间...")
             self.process_pdf_and_build_kb()
 
@@ -39,7 +39,6 @@ class HealthAssistantApp:
         # # pages_text, char_page_mapping = self.pdf_processor.extract_text_with_page_numbers(pdf_reader)
         # 处理images目录中的独立图片文件
         print("  - 正在处理独立图片文件...")
-        pages_text = []
         img_dir = self.config.IMAGES_PATH
         pages_text = self.pdf_processor.images_to_text(img_dir)
 
@@ -55,12 +54,9 @@ class HealthAssistantApp:
             for chunk in chunks:
                 all_chunks.append(chunk)
 
-        # 获取嵌入向量
-        embeddings = self.dashscope_client.get_embeddings(all_chunks)
-
         # 添加到向量存储
         metadata = [{"source": "中国居民膳食指南（2022）", "page": i // 10 + 1} for i in range(len(all_chunks))]
-        self.vector_store.add_embeddings(embeddings, all_chunks, metadata)
+        self.vector_store.add_embeddings(all_chunks, metadata)
         self.vector_store.save()
 
     def run(self):

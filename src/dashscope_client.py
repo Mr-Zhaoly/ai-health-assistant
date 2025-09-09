@@ -15,7 +15,7 @@ class DashScopeClient:
         responses = []
         for text in texts:
             resp = TextEmbedding.call(
-                model=TextEmbedding.Models.text_embedding_v4,
+                model=self.config.TEXT_EMBEDDING,
                 input=text,
                 dimensions=1024
             )
