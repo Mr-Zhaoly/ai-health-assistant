@@ -79,7 +79,10 @@ class HealthAssistantApp:
                 break  # 退出 while 循环
             new_query = user_input
             if history:
-                new_query = self.query_rewriter.rewrite_context_dependent_query(user_input, history)
+                # 比较型Query改写
+                new_query = self.query_rewriter.rewrite_comparative_query(user_input, history)
+                # 上下文依赖型Query改写
+                # new_query = self.query_rewriter.rewrite_context_dependent_query(user_input, history)
 
             # （模拟）回答逻辑 —— 这里可以替换成你自己的逻辑，比如调用大模型 API
             print("用户:", new_query)
