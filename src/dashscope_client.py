@@ -41,3 +41,16 @@ class DashScopeClient:
             return response.output.choices[0].message.content
         else:
             return f"抱歉，生成回答时出错: {response.code} - {response.message}"
+
+    def get_completion(self, prompt):
+        messages = [
+            {"role": "user", "content": prompt}
+        ]
+
+        response = dashscope.Generation.call(
+            model=self.config.DEEPSEEK_MODEL,
+            messages=messages,
+            result_format='message',
+            temperature=0,
+        )
+        return response.output.choices[0].message.content
